@@ -1,0 +1,85 @@
+{
+  "identity": {
+    "team": "经纬数字资产",
+    "subtitle": "CEO 周度经营复盘",
+    "period": "2026 第 23 周 · 6/8 – 6/14 · 口径 T+1",
+    "accent": "#0f766e"
+  },
+  "headline": {
+    "verdict": "行情驱动下交易量与营收<em>双创 8 周新高</em>，但<span class=\"warn\">获客引擎转弱、客户集中度偏高</span>——增长动力须从「拉新」切到「留存 × ARPU」。",
+    "summary": "周交易量 48.2 亿美元（+12.3%）、营收 1,240 万美元（+8.5%）、净利率 38.2%。增量集中在东南亚与中东；隐忧是净新增用户连续两周下滑、CAC 升至 $58、突破 $50 红线、头部 10 客户贡献 42% 交易量。"
+  },
+  "pillars": [
+    {
+      "kind": "win", "tagText": "本周赢点", "title": "交易量创新高",
+      "value": "48.2", "unit": "亿$", "delta": "12.3% 环比 · 8 周新高", "deltaDir": "up",
+      "spark": [48, 58, 62, 54, 68, 80, 74, 100],
+      "note": "BTC 行情 + 机构入金双驱动，东南亚（+18%）、中东（+22%）领涨。属行情型增长，不宜线性外推。"
+    },
+    {
+      "kind": "risk", "tagText": "最大风险", "title": "获客引擎转弱",
+      "value": "$58", "unit": "CAC", "delta": "破 $50 红线 · 净新增 -5.2%", "deltaDir": "flat",
+      "spark": [60, 64, 68, 72, 80, 86, 92, 100],
+      "note": "净新增用户连续两周下滑，单客获取成本走高，渠道效率下降。需立即复盘 ROI、收缩低效渠道。"
+    },
+    {
+      "kind": "bet", "tagText": "值得加注", "title": "理财第二曲线",
+      "value": "16", "unit": "%营收", "delta": "占比持续抬升", "deltaDir": "up",
+      "spark": [40, 46, 52, 58, 66, 74, 86, 100],
+      "note": "理财/Staking 收入占比升至 16%，第二增长曲线成型，可对冲手续费的周期性波动，建议加配资源。"
+    }
+  ],
+  "kpis": [
+    { "label": "周交易量", "value": "48.2", "unit": "亿$", "wow": "12.3% 环比", "wowDir": "up" },
+    { "label": "周营收", "value": "1,240", "unit": "万$", "wow": "8.5% 环比", "wowDir": "up" },
+    { "label": "净新增用户", "value": "1.84", "unit": "万", "wow": "5.2% 环比", "wowDir": "down" },
+    { "label": "日均活跃 DAU", "value": "14.2", "unit": "万", "wow": "3.1% 环比", "wowDir": "up" },
+    { "label": "托管资产 AUC", "value": "96.5", "unit": "亿$", "wow": "2.0% 环比", "wowDir": "up" },
+    { "label": "净利率", "value": "38.2", "unit": "%", "wow": "1.4pt 环比", "wowDir": "up" }
+  ],
+  "trend": {
+    "title": "周交易量趋势（近 8 周）",
+    "hint": "单位：亿美元 ｜ 本周创 8 周新高，斜率走陡",
+    "labels": ["W16", "W17", "W18", "W19", "W20", "W21", "W22", "W23"],
+    "values": [36.1, 39.4, 41.0, 38.8, 42.5, 44.9, 42.9, 48.2]
+  },
+  "composition": {
+    "title": "营收结构",
+    "hint": "营收按业务线拆分 ｜ 单位：万美元",
+    "centerValue": "1,240", "centerUnit": "万美元",
+    "segments": [
+      { "name": "交易手续费", "pct": 62, "color": "#0f766e" },
+      { "name": "理财 / Staking", "pct": 16, "color": "#14b8a6" },
+      { "name": "提现 / 法币", "pct": 14, "color": "#5eead4" },
+      { "name": "机构服务", "pct": 8, "color": "#cbd5e1" }
+    ]
+  },
+  "breakdown": {
+    "title": "分区域经营表现",
+    "hint": "本周交易量按地区拆分",
+    "columns": ["区域", "交易量(亿$)", "占比", "环比", "状态"],
+    "rows": [
+      { "cells": ["东南亚", "19.8", "41%"], "wow": "+18%", "wowDir": "up", "status": { "level": "g", "text": "健康" } },
+      { "cells": ["东亚", "13.5", "28%"], "wow": "+9%", "wowDir": "up", "status": { "level": "g", "text": "健康" } },
+      { "cells": ["中东", "8.2", "17%"], "wow": "+22%", "wowDir": "up", "status": { "level": "g", "text": "提速" } },
+      { "cells": ["欧洲", "4.3", "9%"], "wow": "-6%", "wowDir": "down", "status": { "level": "a", "text": "观察" } },
+      { "cells": ["其他", "2.4", "5%"], "wow": "-3%", "wowDir": "down", "status": { "level": "a", "text": "观察" } }
+    ]
+  },
+  "risks": {
+    "title": "风险与关注项",
+    "hint": "需 CEO 决策或重点跟进",
+    "rows": [
+      { "metric": "获客成本 CAC", "current": "$58", "threshold": "<$50", "status": { "level": "r", "text": "超标" } },
+      { "metric": "头部10客户占比", "current": "42%", "threshold": "<35%", "status": { "level": "a", "text": "偏高" } },
+      { "metric": "提现峰值承压", "current": "83%", "threshold": "<90%", "status": { "level": "a", "text": "关注" } },
+      { "metric": "牌照 / 合规进度", "current": "4/5", "threshold": "—", "status": { "level": "g", "text": "正常" } }
+    ]
+  },
+  "nextSteps": [
+    { "urgency": "即刻", "urgent": true, "text": "<b>复盘获客渠道 ROI</b>，砍掉单渠道 CAC>$80 的低效渠道，预算回流高 LTV 渠道——先把红灯灭掉。", "owner": "增长负责人 · 6/18 前" },
+    { "urgency": "即刻", "urgent": true, "text": "<b>启动大客户分散与做市深度方案</b>，将头部 10 客户集中度压回 35% 以内。", "owner": "机构 BD · 本月内" },
+    { "urgency": "本月", "urgent": false, "text": "<b>给理财业务加配资源</b>，承接第二曲线，把行情红利沉淀为结构性收入。", "owner": "理财产品线 · 下周方案" }
+  ],
+  "footer": "本页为虚构演示数据 · 仅用于版式评审 · 经纬数字资产 CEO 办公室"
+}

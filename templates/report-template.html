@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<!--
+  ============================================================================
+  一页纸周报模板 · weekly-report-html
+  ----------------------------------------------------------------------------
+  这份文件开箱即渲染（自带示例数据）。改成你自己的周报，只做三件事：
+    1) 换肤：改下面 :root 里的 --accent 一个变量，全篇主色随之统一。
+    2) 换数据：搜索 “🔧 替换” 注释，逐段把示例内容改成你的数据。
+    3) 重算图表：数据变了，按 references/design-spec.md §8 的公式
+       重算折线 points 和环图 dasharray/offset —— 别留旧坐标。
+  设计规则（配色/涨跌符号/图表选择/打印/可访问性）见 references/design-spec.md。
+  ============================================================================
+-->
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>周度经营大盘 · 模板</title>
+<style>
+  :root{
+    --accent:#0f766e;        /* 🔧 换肤：改这一个值即可（默认深青）。负向色与状态 pill 已按对比度锁定，勿改。 */
+    --accent-soft:#e6f1ef;   /*    主色浅底（tag 背景）。换主色时同步调成同色系浅底。 */
+    --bg:#f6f7f8; --panel:#ffffff; --ink:#16181d; --sub:#64748b; --line:#e7eaee;
+    --good:#0f766e; --bad:#c2410c;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",Segoe UI,sans-serif;
+    background:var(--bg);color:var(--ink);line-height:1.55;-webkit-font-smoothing:antialiased}
+  .page{max-width:1180px;margin:0 auto;padding:34px 40px 46px}
+
+  /* 抬头 */
+  .eyebrow{display:flex;justify-content:space-between;font-size:12px;color:var(--sub);
+    letter-spacing:.5px;padding-bottom:14px;border-bottom:2px solid var(--ink);margin-bottom:26px}
+  .eyebrow b{color:var(--ink)}
+
+  /* 一句话结论 */
+  .headline{margin-bottom:24px}
+  .headline .kick{font-size:12.5px;font-weight:700;color:var(--accent);letter-spacing:1px;
+    text-transform:uppercase;margin-bottom:11px}
+  .headline h1{font-size:30px;font-weight:800;line-height:1.34;letter-spacing:-.4px;max-width:1000px}
+  .headline h1 em{font-style:normal;color:var(--accent)}
+  .headline h1 .warn{color:var(--bad)}
+  .headline .sub{font-size:14.5px;color:var(--sub);margin-top:15px;max-width:920px;line-height:1.7}
+
+  /* 三支柱 */
+  .pillars{display:grid;grid-template-columns:repeat(3,1fr);
+    border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);margin-bottom:30px}
+  .pillar{padding:20px 24px;border-right:1px solid var(--line)}
+  .pillar:last-child{border-right:none}
+  .pillar .tag{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin-bottom:14px}
+  .pillar .tag.win{background:var(--accent-soft);color:var(--good)}
+  .pillar .tag.risk{background:#fbeae0;color:var(--bad)}
+  .pillar .tag.bet{background:#eef0f3;color:var(--sub)}
+  .pillar h2{font-size:14.5px;font-weight:700;margin-bottom:4px}
+  .pillar .big{font-size:34px;font-weight:800;letter-spacing:-1px;line-height:1;margin:12px 0 4px;
+    font-variant-numeric:tabular-nums}
+  .pillar .big small{font-size:15px;color:var(--sub);font-weight:600}
+  .pillar .delta{font-size:12.5px;font-weight:700}
+  .pillar p{font-size:12.5px;color:var(--sub);margin-top:12px;line-height:1.62}
+  .mini{display:flex;align-items:flex-end;gap:4px;height:32px;margin-top:14px}
+  .mini span{flex:1;border-radius:1px;background:#dfe3e6}
+  .pillar.w .mini span:last-child{background:var(--good)}
+  .pillar.r .mini span:last-child{background:var(--bad)}
+  .pillar.b .mini span:last-child{background:var(--accent)}
+
+  /* 分区标签 */
+  .seclabel{display:flex;align-items:center;gap:12px;margin:0 0 16px}
+  .seclabel h2{font-size:12px;font-weight:700;color:var(--sub);letter-spacing:1.5px;text-transform:uppercase;white-space:nowrap}
+  .seclabel::after{content:"";flex:1;height:1px;background:var(--line)}
+
+  /* KPI 计分卡 */
+  .kpis{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:24px}
+  .kpi{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 14px 12px}
+  .kpi .k-label{font-size:12px;color:var(--sub);margin-bottom:8px;white-space:nowrap}
+  .kpi .k-val{font-size:23px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
+  .kpi .k-unit{font-size:13px;font-weight:600;color:var(--sub);margin-left:2px}
+  .kpi .k-wow{font-size:12px;margin-top:6px;font-weight:600;font-variant-numeric:tabular-nums}
+  .up{color:var(--good)} .down{color:var(--bad)}
+  .up::before{content:"▲ "} .down::before{content:"▼ "}
+
+  /* 卡片 + 栅格 */
+  .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;margin-bottom:16px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:18px 20px}
+  .card h3{font-size:14px;font-weight:700;margin-bottom:2px}
+  .card .hint{font-size:12px;color:var(--sub);margin-bottom:14px}  /* hint=口径说明，不是再下一次结论 */
+
+  /* 环图图例 */
+  .donut-row{display:flex;align-items:center;gap:22px}
+  .donut-legend{flex:1;font-size:13px}
+  .donut-legend .row{display:flex;justify-content:space-between;align-items:center;
+    padding:7px 0;border-bottom:1px dashed var(--line)}
+  .donut-legend .row:last-child{border-bottom:none}
+  .donut-legend .nm{display:flex;align-items:center;gap:8px}
+  .donut-legend .nm i{width:9px;height:9px;border-radius:50%}
+  .donut-legend .pct{font-weight:700;font-variant-numeric:tabular-nums}
+
+  /* 表格 */
+  table{width:100%;border-collapse:collapse;font-size:13px}
+  th,td{text-align:right;padding:9px 6px;border-bottom:1px solid var(--line);font-variant-numeric:tabular-nums}
+  th{color:var(--sub);font-weight:600;font-size:12px}
+  th:first-child,td:first-child{text-align:left}
+  .pill{display:inline-block;padding:1px 8px;border-radius:20px;font-size:11px;font-weight:600}
+  .pill.g{background:#dcf2ec;color:#0f766e} .pill.a{background:#fcefd9;color:#92400e}
+  .pill.r{background:#fbe3d6;color:#9a3412}
+
+  /* 下周三步走 */
+  .next{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin-top:6px}
+  .next h2{font-size:14px;font-weight:700;margin-bottom:14px}
+  .next .step{display:flex;gap:14px;align-items:baseline;padding:10px 0;font-size:13.5px;
+    border-bottom:1px solid var(--line)}
+  .next .step:last-child{border-bottom:none}
+  .next .step .a{flex:none;font-size:11px;font-weight:700;color:#fff;background:var(--accent);
+    border-radius:6px;padding:3px 10px;white-space:nowrap}
+  .next .step .a.r{background:var(--bad)}
+  .next .step b{font-weight:700}
+  .next .step .own{margin-left:auto;flex:none;font-size:11.5px;color:var(--sub);white-space:nowrap}
+
+  .foot{margin-top:22px;font-size:11px;color:var(--sub);text-align:center;letter-spacing:.5px}
+
+  /* 打印 / 导 PDF —— 见 design-spec §9，四件事缺一不可 */
+  @media print{
+    *{ -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    @page{ size:A4 landscape; margin:10mm; }
+    body{ background:#fff; }
+    .page{ max-width:none; padding:0; }
+    .pillars,.pillar,.card,.kpi,.next,.next .step,table tr{ break-inside:avoid; page-break-inside:avoid; }
+    .pill,.pillar .tag,.foot,.next .step .a,.next .step .own{ font-size:12px; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- 🔧 替换 ① 抬头：团队 / 周期 / 口径 -->
+  <div class="eyebrow">
+    <span><b>经纬数字资产</b> · CEO 周度经营复盘</span>
+    <span>2026 第 23 周 · 6/8 – 6/14 · 口径 T+1</span>
+    <span>周度经营大盘</span>
+  </div>
+
+  <!-- 🔧 替换 ② 一句话结论：务必带「但是」。<em>=主色高亮正向，<span class="warn">=负向高亮风险 -->
+  <div class="headline">
+    <div class="kick">本周一句话结论</div>
+    <h1>行情驱动下交易量与营收<em>双创 8 周新高</em>，但<span class="warn">获客引擎转弱、客户集中度偏高</span>——增长动力须从「拉新」切到「留存 × ARPU」。</h1>
+    <div class="sub">周交易量 48.2 亿美元（+12.3%）、营收 1,240 万美元（+8.5%）、净利率 38.2%。增量集中在东南亚与中东；隐忧是净新增用户连续两周下滑、CAC 升至 $58、突破 $50 红线、头部 10 客户贡献 42% 交易量。</div>
+  </div>
+
+  <!-- 🔧 替换 ③ 三支柱：赢点(w/win) / 风险(r/risk) / 押注(b/bet)。
+       注意 deltaDir：成本上升等「方向与好坏冲突」的，用红色无箭头（见风险支柱写法）。 -->
+  <div class="pillars">
+    <div class="pillar w">
+      <span class="tag win">本周赢点</span>
+      <h2>交易量创新高</h2>
+      <div class="big">48.2<small> 亿$</small></div>
+      <div class="delta up">12.3% 环比 · 8 周新高</div>
+      <div class="mini"><span style="height:48%"></span><span style="height:58%"></span><span style="height:62%"></span><span style="height:54%"></span><span style="height:68%"></span><span style="height:80%"></span><span style="height:74%"></span><span style="height:100%"></span></div>
+      <p>BTC 行情 + 机构入金双驱动，东南亚（+18%）、中东（+22%）领涨。属行情型增长，不宜线性外推。</p>
+    </div>
+    <div class="pillar r">
+      <span class="tag risk">最大风险</span>
+      <h2>获客引擎转弱</h2>
+      <div class="big">$58<small> CAC</small></div>
+      <!-- 成本上升：方向(↑)与好坏(坏)冲突 → 红色无箭头，不要用 .down -->
+      <div class="delta" style="color:var(--bad)">破 $50 红线 · 净新增 -5.2%</div>
+      <div class="mini"><span style="height:60%"></span><span style="height:64%"></span><span style="height:68%"></span><span style="height:72%"></span><span style="height:80%"></span><span style="height:86%"></span><span style="height:92%"></span><span style="height:100%"></span></div>
+      <p>净新增用户连续两周下滑，单客获取成本走高，渠道效率下降。需立即复盘 ROI、收缩低效渠道。</p>
+    </div>
+    <div class="pillar b">
+      <span class="tag bet">值得加注</span>
+      <h2>理财第二曲线</h2>
+      <div class="big">16<small> %营收</small></div>
+      <div class="delta up">占比持续抬升</div>
+      <div class="mini"><span style="height:40%"></span><span style="height:46%"></span><span style="height:52%"></span><span style="height:58%"></span><span style="height:66%"></span><span style="height:74%"></span><span style="height:86%"></span><span style="height:100%"></span></div>
+      <p>理财/Staking 收入占比升至 16%，第二增长曲线成型，可对冲手续费的周期性波动，建议加配资源。</p>
+    </div>
+  </div>
+
+  <!-- 从「结论」切到「证据」的换挡（保持 <h2> 语义，勿换成 div） -->
+  <div class="seclabel"><h2>经营全景 · 明细</h2></div>
+
+  <!-- 🔧 替换 ④ KPI 计分卡：4–6 个核心指标。环比方向用 .up / .down -->
+  <div class="kpis">
+    <div class="kpi"><div class="k-label">周交易量</div>
+      <div class="k-val">48.2<span class="k-unit">亿$</span></div><div class="k-wow up">12.3% 环比</div></div>
+    <div class="kpi"><div class="k-label">周营收</div>
+      <div class="k-val">1,240<span class="k-unit">万$</span></div><div class="k-wow up">8.5% 环比</div></div>
+    <div class="kpi"><div class="k-label">净新增用户</div>
+      <div class="k-val">1.84<span class="k-unit">万</span></div><div class="k-wow down">5.2% 环比</div></div>
+    <div class="kpi"><div class="k-label">日均活跃 DAU</div>
+      <div class="k-val">14.2<span class="k-unit">万</span></div><div class="k-wow up">3.1% 环比</div></div>
+    <div class="kpi"><div class="k-label">托管资产 AUC</div>
+      <div class="k-val">96.5<span class="k-unit">亿$</span></div><div class="k-wow up">2.0% 环比</div></div>
+    <div class="kpi"><div class="k-label">净利率</div>
+      <div class="k-val">38.2<span class="k-unit">%</span></div><div class="k-wow up">1.4pt 环比</div></div>
+  </div>
+
+  <div class="grid">
+    <!-- 🔧 替换 ⑤ 趋势折线：数据变了必须按 design-spec §8 重算 points！
+         y = 170 - (v - vmin)/(vmax - vmin) * 150；x 等距 20→540。 -->
+    <div class="card">
+      <h3>周交易量趋势（近 8 周）</h3>
+      <div class="hint">单位：亿美元 ｜ 本周创 8 周新高，斜率走陡</div>
+      <svg viewBox="0 0 600 220" width="100%">
+        <g stroke="#eef1f2" stroke-width="1">
+          <line x1="20" y1="40" x2="580" y2="40"/><line x1="20" y1="80" x2="580" y2="80"/>
+          <line x1="20" y1="120" x2="580" y2="120"/><line x1="20" y1="160" x2="580" y2="160"/>
+        </g>
+        <polyline points="20,159 94,126 169,110 243,132 317,95 391,71 466,91 540,38 540,170 20,170"
+          fill="var(--accent)" opacity="0.07" stroke="none"/>
+        <polyline points="20,159 94,126 169,110 243,132 317,95 391,71 466,91 540,38"
+          fill="none" stroke="var(--accent)" stroke-width="2.5" stroke-linejoin="round"/>
+        <g fill="var(--accent)">
+          <circle cx="20" cy="159" r="3"/><circle cx="94" cy="126" r="3"/><circle cx="169" cy="110" r="3"/>
+          <circle cx="243" cy="132" r="3"/><circle cx="317" cy="95" r="3"/><circle cx="391" cy="71" r="3"/>
+          <circle cx="466" cy="91" r="3"/><circle cx="540" cy="38" r="4.5"/>
+        </g>
+        <text x="540" y="26" text-anchor="middle" font-size="13" font-weight="700" fill="#16181d">48.2</text>
+        <!-- 轴标签固定用 #64748b（达 AA），勿用更浅的灰 -->
+        <g font-size="11" fill="#64748b" text-anchor="middle">
+          <text x="20" y="190">W16</text><text x="94" y="190">W17</text><text x="169" y="190">W18</text>
+          <text x="243" y="190">W19</text><text x="317" y="190">W20</text><text x="391" y="190">W21</text>
+          <text x="466" y="190">W22</text><text x="540" y="190">W23</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- 🔧 替换 ⑥ 结构环图：≤5 段。数据变了按 design-spec §8 重算 dasharray/offset！
+         dash_k = pct_k% × 439.8；offset = -(前面各段之和)。hint 写口径，不写结论。 -->
+    <div class="card">
+      <h3>营收结构</h3>
+      <div class="hint">营收按业务线拆分 ｜ 单位：万美元</div>
+      <div class="donut-row">
+        <svg viewBox="0 0 180 180" width="150" height="150">
+          <g transform="rotate(-90 90 90)" fill="none" stroke-width="22">
+            <circle cx="90" cy="90" r="70" stroke="#0f766e" stroke-dasharray="272.7 167.1" stroke-dashoffset="0"/>
+            <circle cx="90" cy="90" r="70" stroke="#14b8a6" stroke-dasharray="70.4 369.4" stroke-dashoffset="-272.7"/>
+            <circle cx="90" cy="90" r="70" stroke="#5eead4" stroke-dasharray="61.6 378.2" stroke-dashoffset="-343.1"/>
+            <circle cx="90" cy="90" r="70" stroke="#cbd5e1" stroke-dasharray="35.2 404.6" stroke-dashoffset="-404.7"/>
+          </g>
+          <text x="90" y="86" text-anchor="middle" font-size="22" font-weight="700" fill="#16181d">1,240</text>
+          <text x="90" y="104" text-anchor="middle" font-size="11" fill="#64748b">万美元</text>
+        </svg>
+        <div class="donut-legend">
+          <div class="row"><span class="nm"><i style="background:#0f766e"></i>交易手续费</span><span class="pct">62%</span></div>
+          <div class="row"><span class="nm"><i style="background:#14b8a6"></i>理财 / Staking</span><span class="pct">16%</span></div>
+          <div class="row"><span class="nm"><i style="background:#5eead4"></i>提现 / 法币</span><span class="pct">14%</span></div>
+          <div class="row"><span class="nm"><i style="background:#cbd5e1"></i>机构服务</span><span class="pct">8%</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid">
+    <!-- 🔧 替换 ⑦ 明细表：按你的主切片（地区/产品线/渠道/客户分层）。环比 .up/.down，状态 pill g/a/r -->
+    <div class="card">
+      <h3>分区域经营表现</h3>
+      <div class="hint">本周交易量按地区拆分</div>
+      <table>
+        <thead><tr><th>区域</th><th>交易量(亿$)</th><th>占比</th><th>环比</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td>东南亚</td><td>19.8</td><td>41%</td><td class="up" style="font-weight:600">+18%</td><td><span class="pill g">健康</span></td></tr>
+          <tr><td>东亚</td><td>13.5</td><td>28%</td><td class="up" style="font-weight:600">+9%</td><td><span class="pill g">健康</span></td></tr>
+          <tr><td>中东</td><td>8.2</td><td>17%</td><td class="up" style="font-weight:600">+22%</td><td><span class="pill g">提速</span></td></tr>
+          <tr><td>欧洲</td><td>4.3</td><td>9%</td><td class="down" style="font-weight:600">-6%</td><td><span class="pill a">观察</span></td></tr>
+          <tr><td>其他</td><td>2.4</td><td>5%</td><td class="down" style="font-weight:600">-3%</td><td><span class="pill a">观察</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 🔧 替换 ⑧ 风险表：指标 / 当前值 / 阈值 / 状态。当前值与阈值分清，别混为一谈 -->
+    <div class="card">
+      <h3>风险与关注项</h3>
+      <div class="hint">需 CEO 决策或重点跟进</div>
+      <table>
+        <thead><tr><th>指标</th><th>当前值</th><th>阈值</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr><td>获客成本 CAC</td><td>$58</td><td>&lt;$50</td><td><span class="pill r">超标</span></td></tr>
+          <tr><td>头部10客户占比</td><td>42%</td><td>&lt;35%</td><td><span class="pill a">偏高</span></td></tr>
+          <tr><td>提现峰值承压</td><td>83%</td><td>&lt;90%</td><td><span class="pill a">关注</span></td></tr>
+          <tr><td>牌照 / 合规进度</td><td>4/5</td><td>—</td><td><span class="pill g">正常</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 🔧 替换 ⑨ 下周三步走：动词开头、关键词加粗，每条带责任人 · 截止。紧急用 <span class="a r"> -->
+  <div class="next">
+    <h2>下周三步走</h2>
+    <div class="step"><span class="a r">即刻</span><span><b>复盘获客渠道 ROI</b>，砍掉单渠道 CAC&gt;$80 的低效渠道，预算回流高 LTV 渠道——先把红灯灭掉。</span><span class="own">增长负责人 · 6/18 前</span></div>
+    <div class="step"><span class="a r">即刻</span><span><b>启动大客户分散与做市深度方案</b>，将头部 10 客户集中度压回 35% 以内。</span><span class="own">机构 BD · 本月内</span></div>
+    <div class="step"><span class="a">本月</span><span><b>给理财业务加配资源</b>，承接第二曲线，把行情红利沉淀为结构性收入。</span><span class="own">理财产品线 · 下周方案</span></div>
+  </div>
+
+  <!-- 🔧 替换 ⑩ 页脚：口径 / 免责 -->
+  <div class="foot">本页为虚构演示数据 · 仅用于版式评审 · 经纬数字资产 CEO 办公室</div>
+</div>
+</body>
+</html>
