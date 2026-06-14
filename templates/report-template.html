@@ -75,8 +75,12 @@
   .kpi .k-val{font-size:23px;font-weight:700;letter-spacing:-.5px;font-variant-numeric:tabular-nums}
   .kpi .k-unit{font-size:13px;font-weight:600;color:var(--sub);margin-left:2px}
   .kpi .k-wow{font-size:12px;margin-top:6px;font-weight:600;font-variant-numeric:tabular-nums}
+  /* 环比/变化的着色词汇 —— 见 design-spec §4 判定树。先判方向与好坏是否一致，再判是否被列为告警 */
   .up{color:var(--good)} .down{color:var(--bad)}
   .up::before{content:"▲ "} .down::before{content:"▼ "}
+  .cost-good{color:var(--good)}   /* 成本/越低越好 改善：方向会误导，故无箭头 */
+  .cost-bad{color:var(--bad)}     /* 成本/越低越好 恶化：无箭头 */
+  .muted{color:var(--sub)}        /* 常规波动 / 未被判为告警 / 无历史：中性灰、无箭头，+/- 号写进文本 */
 
   /* 卡片 + 栅格 */
   .grid{display:grid;grid-template-columns:1.55fr 1fr;gap:16px;margin-bottom:16px}
@@ -160,8 +164,8 @@
       <span class="tag risk">最大风险</span>
       <h2>获客引擎转弱</h2>
       <div class="big">$58<small> CAC</small></div>
-      <!-- 成本上升：方向(↑)与好坏(坏)冲突 → 红色无箭头，不要用 .down -->
-      <div class="delta" style="color:var(--bad)">破 $50 红线 · 净新增 -5.2%</div>
+      <!-- 成本上升：方向(↑)与好坏(坏)冲突 → 用 .cost-bad（红色无箭头），不要用 .down -->
+      <div class="delta cost-bad">破 $50 红线 · 净新增 -5.2%</div>
       <div class="mini"><span style="height:60%"></span><span style="height:64%"></span><span style="height:68%"></span><span style="height:72%"></span><span style="height:80%"></span><span style="height:86%"></span><span style="height:92%"></span><span style="height:100%"></span></div>
       <p>净新增用户连续两周下滑，单客获取成本走高，渠道效率下降。需立即复盘 ROI、收缩低效渠道。</p>
     </div>

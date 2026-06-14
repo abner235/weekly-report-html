@@ -18,7 +18,7 @@
     },
     {
       "kind": "risk", "tagText": "最大风险", "title": "获客引擎转弱",
-      "value": "$58", "unit": "CAC", "delta": "破 $50 红线 · 净新增 -5.2%", "deltaDir": "flat",
+      "value": "$58", "unit": "CAC", "delta": "破 $50 红线 · 净新增 -5.2%", "deltaDir": "cost-bad",
       "spark": [60, 64, 68, 72, 80, 86, 92, 100],
       "note": "净新增用户连续两周下滑，单客获取成本走高，渠道效率下降。需立即复盘 ROI、收缩低效渠道。"
     },

@@ -48,7 +48,7 @@
 | `title` | 支柱标题 | "交易量创新高" |
 | `value` / `unit` | hero 数字 + 单位 | "48.2" / "亿$" |
 | `delta` | 一行变化描述 | "12.3% 环比 · 8 周新高" |
-| `deltaDir` | `up`｜`down`｜`flat`（flat=红色无箭头，用于成本上升等冲突场景） | "up" |
+| `deltaDir` | `up`｜`down`｜`cost-good`｜`cost-bad`｜`muted`（按 design-spec §4 判定树选；成本上升用 `cost-bad`，常规波动用 `muted`） | "cost-bad" |
 | `spark` | 8 个相对高度(%) | [48,58,62,54,68,80,74,100] |
 | `note` | 一段说明 | "BTC 行情 + 机构入金双驱动…" |
 
@@ -58,7 +58,7 @@
 | `label` | 指标名 | "周交易量" |
 | `value` / `unit` | 值 + 单位 | "48.2" / "亿$" |
 | `wow` | 环比文字 | "12.3% 环比" |
-| `wowDir` | `up`｜`down`｜`flat` | "up" |
+| `wowDir` | `up`｜`down`｜`cost-good`｜`cost-bad`｜`muted`（同 `deltaDir`，见 design-spec §4 判定树） | "up" |
 
 ### `trend` — 趋势折线
 | 字段 | 说明 | 示例 |
@@ -105,4 +105,4 @@
 - 分区/分段表的数值之和、占比之和是否自洽（占比合计 100%、分项合计 = 总量）。
 - 环图各段 pct 之和 = 100%，重算后 dash 之和 ≈ 439.8。
 - 头部、支柱、KPI、表格里同一指标的数字与阈值是否完全一致。
-- 每个 `deltaDir/wowDir` 是否正确：方向与好坏冲突的（成本上升）用 `flat`。
+- 每个 `deltaDir/wowDir` 是否按 design-spec §4 判定树选对：被判告警且方向一致用 `up/down`；成本类方向冲突用 `cost-good/cost-bad`；常规波动/无历史用 `muted`。
