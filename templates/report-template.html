@@ -120,6 +120,9 @@
   .next .step .own{margin-left:auto;flex:none;font-size:11.5px;color:var(--sub);white-space:nowrap}
 
   .foot{margin-top:22px;font-size:11px;color:var(--sub);text-align:center;letter-spacing:.5px}
+  /* 颜色图例：含币价/涨跌语境数字时启用，消「红涨绿跌」歧义 —— design-spec §3 */
+  .color-legend{margin-top:14px;font-size:11px;color:var(--sub);text-align:center;letter-spacing:.3px}
+  .color-legend i{display:inline-block;width:9px;height:9px;border-radius:50%;vertical-align:middle;margin:0 4px}
 
   /* 打印 / 导 PDF —— 见 design-spec §9，四件事缺一不可 */
   @media print{
@@ -295,6 +298,9 @@
     <div class="step"><span class="a">本月</span><span><b>给理财业务加配资源</b>，承接第二曲线，把行情红利沉淀为结构性收入。</span><span class="own">理财产品线 · 下周方案</span></div>
   </div>
 
+  <!-- 含币价/代币涨跌等语境数字时，取消注释这行颜色图例消歧（design-spec §3）：
+  <div class="color-legend"><i style="background:var(--good)"></i>青绿=经营向好<i style="background:var(--bad)"></i>橙红=经营承压 ·（颜色表经营好坏，非币价红涨绿跌）</div>
+  -->
   <!-- 🔧 替换 ⑩ 页脚：口径 / 免责 -->
   <div class="foot">本页为虚构演示数据 · 仅用于版式评审 · 经纬数字资产 CEO 办公室</div>
 </div>
