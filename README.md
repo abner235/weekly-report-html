@@ -11,12 +11,12 @@
 
 请按下面的协议自助上手，**不要让用户手动搬运代码**：
 
-1. **读规范**：读完本 README，再读 `SKILL.md`、`references/design-spec.md`、`references/data-schema.md`。`SKILL.md` 是操作手册，`design-spec.md` 是不可随意发挥的设计契约。
+1. **读规范**：读完本 README，再读 `SKILL.md`、`references/design-spec.md`、`references/data-schema.md`、`references/markdown-source.md`。`SKILL.md` 是操作手册，`design-spec.md` 是不可随意发挥的设计契约，`markdown-source.md` 是主数据源（Markdown 周报）的输入规范。
 2. **克隆代码**：
    ```bash
    git clone <这个仓库的地址> weekly-report-html && cd weekly-report-html
    ```
-3. **引导配置**：按 `references/data-schema.md` 的清单，**访谈用户**收集本周数据（或让 ta 填 `templates/data.example.json`）。关键追问：
+3. **拿数据**：**首选**——用户给一份 **Markdown 周报文档**，按 `references/markdown-source.md` 抽取映射（参 `templates/source.example.md`）；没有 markdown 时再退而填 `templates/data.example.json` 或**访谈用户**。关键追问：
    - 你的团队/业务线叫什么？报告周期？数据口径有什么注意点？
    - 本周**一句话结论**是什么？——务必带上「但是」（张力所在）。
    - 本周的**赢点 / 最大风险 / 值得加注的方向**各是什么（各一个核心数字）？
@@ -50,6 +50,8 @@
 
 **方式 C：把仓库地址贴给 AI**，让它按上面的「🤖 AI 协议」帮你跑完。
 
+**方式 D：给 AI 一份 Markdown 周报（主数据源）**——把团队已有的 markdown 周报（或照 `templates/source.example.md` 写一份）发给装了本 skill 的 AI，说「按这个 skill 把它渲染成一页纸 HTML 大盘」。markdown 只写内容数值，着色/图表/格式由 skill 自动套用。
+
 ---
 
 ## 仓库结构
@@ -60,10 +62,12 @@ weekly-report-html/
 ├── SKILL.md                     # 操作手册：生成流程 + 核心规则摘要 + 自检清单
 ├── references/
 │   ├── design-spec.md           # 设计契约：风格 / 配色 / 涨跌符号 / 图表选择 / 排版 / 打印 / 可访问性 / 反模式
-│   └── data-schema.md           # 数据契约：字段清单 + 访谈提纲
+│   ├── data-schema.md           # 数据契约：字段清单 + 访谈提纲
+│   └── markdown-source.md       # 主数据源：用 Markdown 周报作输入（结构约定 + 字段映射 + 解析规则）
 └── templates/
     ├── report-template.html     # 可改肤模板，开箱即渲染
-    └── data.example.json        # 示例数据
+    ├── data.example.json        # 示例数据（JSON）
+    └── source.example.md        # 示例数据（Markdown 源）
 ```
 
 ## 设计要点速记（完整版见 design-spec.md）
